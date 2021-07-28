@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>ZCC 2021</title>
+      <link rel="stylesheet" href="{{url_for('static',filename='main.css')}}">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1 class="logo">Zendesk Ticket Viewer</h1>
+          <li><a href="{{ url_for('home') }}"></a></li>
+      </div>
+    </header>
+    <div class="container">
+        {%block content%}
+        {%endblock%}
+    </div>
+  </body>
+</html>
