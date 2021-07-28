@@ -1,13 +1,13 @@
 import requests
 import json
-
+from secrets import Secrets
 
 class API_CLIENT():
 
     def __init__(self, subdomain, email, api_key) -> None:
         self.domain = 'https://zccandrewscam.zendesk.com'
-        self.email = 'cameron.andrews@gmail.com/token'
-        self.api_key = 'PTUSr1lfqJXapEFDMcRDRcmfyfOk9ItN3KiJuNQP'
+        self.email = Secrets.email
+        self.api_key = Secrets.api_key
         self.session = requests.Session()
         self.session.auth = self.email, self.api_key
 
