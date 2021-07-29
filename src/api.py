@@ -4,7 +4,7 @@ from secrets import Secrets
 
 class API_CLIENT():
 
-    def __init__(self, subdomain, email, api_key) -> None:
+    def __init__(self) -> None:
         self.domain = 'https://zccandrewscam.zendesk.com'
         self.email = Secrets.email
         self.api_key = Secrets.api_key

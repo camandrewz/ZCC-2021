@@ -2,14 +2,13 @@ from api import API_CLIENT
 from Ticket import Ticket
 import pandas as pd
 from flask import Flask, render_template, request
+import copy
 
 
 def main():
 
-    client = API_CLIENT('zccandrewscam', 'cameron.andrews@gmail.com',
-                        'PTUSr1lfqJXapEFDMcRDRcmfyfOk9ItN3KiJuNQP')
+    client = API_CLIENT()
 
-    ticket_count = client.get_ticket_count()
     tickets = client.get_all_tickets()
 
     all_tickets = [Ticket(tix['url'], tix['id'], tix['external_id'], tix['created_at'], tix['updated_at'], tix['type'], tix['subject'], tix['description'], tix['priority'], tix['status'],
@@ -29,7 +28,7 @@ def main():
     @app.route('/')
     def home():
         app.route('/')
-        
+
         if 'Next' in request.form:
             print("Next test")
         elif 'Back' in request.form:
