@@ -21,8 +21,6 @@ def main():
         tix_table.loc[len(tix_table.index)] = [
             ticket.id, ticket.subject, ticket.created_at, ticket.priority, ticket.tags]
 
-    # print(tix_table)
-
     app = Flask(__name__)
 
     @app.route('/')

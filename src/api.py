@@ -2,6 +2,7 @@ import requests
 import json
 from secrets import Secrets
 
+
 class API_CLIENT():
 
     def __init__(self) -> None:
