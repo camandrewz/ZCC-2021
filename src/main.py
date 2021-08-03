@@ -10,88 +10,97 @@ def main():
     client = API_CLIENT()
 
     while True:
+        print("\n")
+        input_cmd = input("Enter your command (\"help\" lists all commands): ")
+        handle_command(input_cmd, client)
+
+
+def handle_command(input_cmd, client):
+
+    if input_cmd == "help":
+        print("\n")
+        print("1) List Tickets (Pages of 25)\n")
+        print("2) View a specific ticket\n")
+        print("3) Get total ticket count\n")
+        print("4) Exit\n")
+
+    elif input_cmd == "1":
+
+        clearConsole()
+        print("\n\n\n\n")
+
+        tix_table = get_tix_table(client, None)
 
         print("\n")
+        print(tix_table)
+        print("\nType \"next\" to go to the next page.")
+        print("Type \"back\" to go to the previous page.\n")
 
-        input_cmd = input("Enter your command (\"help\" lists all commands): ")
+    elif input_cmd == "next":
 
-        if input_cmd == "help":
-            print("\n")
-            print("1) List Tickets (Pages of 25)\n")
-            print("2) View a specific ticket\n")
-            print("3) Exit\n")
+        tix_table = get_tix_table(client, "next")
 
-        elif input_cmd == "1":
-
+        if not tix_table.empty:
             clearConsole()
             print("\n\n\n\n")
-
-            tix_table = get_tix_table(client, None)
-
             print("\n")
             print(tix_table)
             print("\nType \"next\" to go to the next page.")
             print("Type \"back\" to go to the previous page.\n")
 
-        elif input_cmd == "next":
+    elif input_cmd == "back":
 
-            tix_table = get_tix_table(client, "next")
+        tix_table = get_tix_table(client, "prev")
 
-            if not tix_table.empty:
-                clearConsole()
-                print("\n\n\n\n")
-                print("\n")
-                print(tix_table)
-                print("\nType \"next\" to go to the next page.")
-                print("Type \"back\" to go to the previous page.\n")
-
-        elif input_cmd == "back":
-
-            tix_table = get_tix_table(client, "prev")
-
-            if not tix_table.empty:
-                clearConsole()
-                print("\n\n\n\n")
-                print("\n")
-                print(tix_table)
-                print("\nType \"next\" to go to the next page.")
-                print("Type \"back\" to go to the previous page.\n")
-
-        elif input_cmd == "2":
-
-            print("\n")
-
-            id = input("Enter the Ticket ID: ")
-
+        if not tix_table.empty:
             clearConsole()
+            print("\n\n\n\n")
+            print("\n")
+            print(tix_table)
+            print("\nType \"next\" to go to the next page.")
+            print("Type \"back\" to go to the previous page.\n")
 
-            ticket = client.get_ticket(id)
+    elif input_cmd == "2":
 
-            if ticket == {}:
-                print("Uh Oh! The Ticket ID entered does not exist. Try Again!")
-                continue
-            else:
+        print("\n")
 
-                print("\n\n\n\n")
+        id = input("Enter the Ticket ID: ")
 
-                for key in ticket["ticket"]:
+        clearConsole()
 
-                    if key == "description":
-                        print(str(key).upper() + ": \n" +
-                              str(ticket["ticket"][key]) + "\n")
+        ticket = client.get_ticket(id)
 
-                    else:
-                        print(str(key).upper() + ": " +
-                              str(ticket["ticket"][key]) + "\n")
-
-        elif input_cmd == "3":
-
-            print("Goodbye!")
-            quit()
-
+        if ticket == {}:
+            print("Uh Oh! The Ticket ID entered does not exist. Try Again!")
+            pass
         else:
 
-            print("Sorry. Command not recognized.")
+            print("\n\n\n\n")
+
+            for key in ticket["ticket"]:
+
+                if key == "description":
+                    print(str(key).upper() + ": \n" +
+                          str(ticket["ticket"][key]) + "\n")
+
+                else:
+                    print(str(key).upper() + ": " +
+                          str(ticket["ticket"][key]) + "\n")
+
+    elif input_cmd == "3":
+
+        count = client.get_ticket_count()
+        print("\nNumber of Tickets:", count)
+
+    elif input_cmd == "4":
+
+        print("Goodbye!")
+        client.close()
+        quit()
+
+    else:
+
+        print("Sorry. Command not recognized.")
 
 
 def clearConsole():
