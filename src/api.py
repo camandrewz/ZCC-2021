@@ -22,17 +22,21 @@ class API_CLIENT():
         response = self.session.get(conn_str).json()
 
         if "error" in response:
-            print("ERROR: " + response["error"])
+
+            print("yea theres an error")
+
+            print("\nERROR: " + response["error"])
 
             if response["error"] == "Couldn't authenticate you":
                 print(
                     "There is likely an error with your \"secrets.py\" file. Validate your entered credentials and Try Again.")
 
-            quit()
+                quit()
 
-        ticket_count = response['count']['value']
+        else:
 
-        return ticket_count
+            ticket_count = response['count']['value']
+            return ticket_count
 
     def get_all_tickets(self, prev_or_next):
 
@@ -43,7 +47,7 @@ class API_CLIENT():
             tickets = self.session.get(conn_str).json()
 
             if "error" in tickets:
-                print("ERROR: " + tickets["error"])
+                print("\nERROR: " + tickets["error"])
 
                 if tickets["error"] == "Couldn't authenticate you":
                     print(
@@ -65,6 +69,15 @@ class API_CLIENT():
 
             tickets = self.session.get(conn_str).json()
 
+            if "error" in tickets:
+                print("\nERROR: " + tickets["error"])
+
+                if tickets["error"] == "Couldn't authenticate you":
+                    print(
+                        "There is likely an error with your \"secrets.py\" file. Validate your entered credentials and Try Again.")
+
+                quit()
+
             if tickets["links"]["prev"] != None:
                 self.curr_prev_link = tickets["links"]["prev"]
                 self.curr_next_link = tickets["links"]["next"]
@@ -81,7 +94,7 @@ class API_CLIENT():
             tickets = self.session.get(conn_str).json()
 
             if "error" in tickets:
-                print("ERROR: " + tickets["error"])
+                print("\nERROR: " + tickets["error"])
 
                 if tickets["error"] == "Couldn't authenticate you":
                     print(
@@ -105,13 +118,19 @@ class API_CLIENT():
         ticket = self.session.get(conn_str).json()
 
         if "error" in ticket:
-            print("ERROR: " + ticket["error"])
+            print("\nERROR: " + ticket["error"])
 
             if ticket["error"] == "Couldn't authenticate you":
                 print(
                     "There is likely an error with your \"secrets.py\" file. Validate your entered credentials and Try Again.")
 
-            quit()
+                quit()
+
+            elif ticket["error"] == "RecordNotFound":
+                print(
+                    "The ticket you requested could not be found. Try again using a different Ticket ID.")
+
+                return {}
 
         if "error" in ticket:
             return {}
