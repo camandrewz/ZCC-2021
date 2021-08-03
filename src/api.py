@@ -28,3 +28,11 @@ class API_CLIENT():
         tickets = self.session.get(conn_str).json()['tickets']
 
         return tickets
+
+    def get_ticket(self, id):
+
+        conn_str = f'{self.domain}/api/v2/tickets/{id}'
+
+        ticket = self.session.get(conn_str).json()
+
+        print(ticket)
