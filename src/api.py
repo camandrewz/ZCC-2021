@@ -1,7 +1,5 @@
 import requests
-import json
 from secrets import Secrets
-
 
 class API_CLIENT():
 
@@ -11,6 +9,8 @@ class API_CLIENT():
         self.api_key = Secrets.api_key
         self.session = requests.Session()
         self.session.auth = self.email, self.api_key
+        self.curr_prev_link = None
+        self.curr_next_link = None
 
     def get_ticket_count(self):
 
@@ -21,13 +21,51 @@ class API_CLIENT():
 
         return ticket_count
 
-    def get_all_tickets(self):
+    def get_all_tickets(self, prev_or_next):
 
-        conn_str = f'{self.domain}/api/v2/tickets.json?page[size]=25'
+        if prev_or_next == None:
 
-        tickets = self.session.get(conn_str).json()['tickets']
+            conn_str = f'{self.domain}/api/v2/tickets.json?page[size]=25'
 
-        return tickets
+            tickets = self.session.get(conn_str).json()
+
+            self.curr_prev_link = tickets["links"]["prev"]
+            self.curr_next_link = tickets["links"]["next"]
+
+            if len(tickets["tickets"]) == 0:
+                return -1
+            else:
+                return tickets['tickets']
+
+        elif prev_or_next == "prev":
+
+            conn_str = self.curr_prev_link
+
+            tickets = self.session.get(conn_str).json()
+
+            if tickets["links"]["prev"] != None:
+                self.curr_prev_link = tickets["links"]["prev"]
+                self.curr_next_link = tickets["links"]["next"]
+
+            if len(tickets["tickets"]) == 0:
+                return -1
+            else:
+                return tickets['tickets']
+
+        elif prev_or_next == "next":
+
+            conn_str = self.curr_next_link
+
+            tickets = self.session.get(conn_str).json()
+
+            if tickets["links"]["next"] != None:
+                self.curr_prev_link = tickets["links"]["prev"]
+                self.curr_next_link = tickets["links"]["next"]
+
+            if len(tickets["tickets"]) == 0:
+                return -1
+            else:
+                return tickets['tickets']
 
     def get_ticket(self, id):
 
@@ -35,4 +73,7 @@ class API_CLIENT():
 
         ticket = self.session.get(conn_str).json()
 
-        print(ticket)
+        if "error" in ticket:
+            return {}
+        else:
+            return ticket
