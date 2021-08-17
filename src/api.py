@@ -23,8 +23,6 @@ class API_CLIENT():
 
         if "error" in response:
 
-            print("yea theres an error")
-
             print("\nERROR: " + response["error"])
 
             if response["error"] == "Couldn't authenticate you":
@@ -47,7 +45,7 @@ class API_CLIENT():
             tickets = self.session.get(conn_str).json()
 
             if "error" in tickets:
-                print("\nERROR: " + tickets["error"])
+                print("\nERROR: " + str(tickets))
 
                 if tickets["error"] == "Couldn't authenticate you":
                     print(
@@ -70,7 +68,7 @@ class API_CLIENT():
             tickets = self.session.get(conn_str).json()
 
             if "error" in tickets:
-                print("\nERROR: " + tickets["error"])
+                print("\nERROR: " + str(tickets))
 
                 if tickets["error"] == "Couldn't authenticate you":
                     print(
